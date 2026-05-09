@@ -1,3 +1,8 @@
-/bin
-/obj
-/.env
+/.config
+/*/bin
+/*/obj
+/*/.env
+*.DS_Store
+.idea
+*.user
+*template.json

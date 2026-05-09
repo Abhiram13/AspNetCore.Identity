@@ -9,11 +9,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace AspNetCore.Identity.Users.Migrations
+namespace AspNetCore.Identity.Migrations
 {
     [DbContext(typeof(UsersDBContext))]
-    [Migration("20260509084651_RenameTablesAndAdminSetup")]
-    partial class RenameTablesAndAdminSetup
+    [Migration("20260509090548_SeedAdminUser")]
+    partial class SeedAdminUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,6 +52,15 @@ namespace AspNetCore.Identity.Users.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("Roles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ConcurrencyStamp = "ad0ecf28-0396-449a-a151-d3cb6007d52f",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        });
                 });
 
             modelBuilder.Entity("AspNetCore.Identity.ApplicationRoleClaim", b =>
@@ -143,6 +152,23 @@ namespace AspNetCore.Identity.Users.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("Users", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "22a9756e-fd6b-43f9-8f48-d975394f384f",
+                            Email = "admin@email.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@EMAIl.COM",
+                            NormalizedUserName = "ADMIN@EMAIl.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEByR...",
+                            PhoneNumberConfirmed = false,
+                            TwoFactorEnabled = false,
+                            UserName = "admin@email.com"
+                        });
                 });
 
             modelBuilder.Entity("AspNetCore.Identity.ApplicationUserClaim", b =>
@@ -203,6 +229,13 @@ namespace AspNetCore.Identity.Users.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("UserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            RoleId = 1
+                        });
                 });
 
             modelBuilder.Entity("AspNetCore.Identity.ApplicationUserToken", b =>

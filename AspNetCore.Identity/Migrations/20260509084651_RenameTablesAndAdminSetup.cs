@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace AspNetCore.Identity.Users.Migrations
+namespace AspNetCore.Identity.Migrations
 {
     /// <inheritdoc />
     public partial class RenameTablesAndAdminSetup : Migration

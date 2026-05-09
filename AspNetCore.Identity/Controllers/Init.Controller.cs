@@ -4,7 +4,7 @@ namespace AspNetCore.Identity.Controllers;
 
 [ApiController]
 [Route("")]
-public class InitController : BaseApiController
+public class InitController : ControllerBase
 {
     [HttpGet]
     public IActionResult Get()

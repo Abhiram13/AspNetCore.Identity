@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace AspNetCore.Identity.Users.Migrations
+namespace AspNetCore.Identity.Migrations
 {
     [DbContext(typeof(UsersDBContext))]
     partial class UsersDBContextModelSnapshot : ModelSnapshot

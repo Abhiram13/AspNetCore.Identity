@@ -3,8 +3,11 @@ using Abhiram.Abstractions.Logging;
 using Abhiram.Extensions.DotEnv;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
-using AspNetCore.Identity.Configurations;
-using AspNetCore.Identity.Models;
+using AspNetCore.Identity.Features.Jwt.Models;
+using AspNetCore.Identity.Features.Jwt.Services;
+using AspNetCore.Identity.Features.Role.Services;
+using AspNetCore.Identity.Features.User.Services;
+using AspNetCore.Identity.Shared.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
@@ -18,6 +21,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddOptions<PostgresConnection>().BindConfiguration("Postgres").ValidateOnStart();
 builder.Services.AddOptions<JwtConfiguration>().BindConfiguration("Jwt").ValidateOnStart();
+builder.Services.AddScoped<RoleService>();
+builder.Services.AddScoped<JwtService>();
+builder.Services.AddScoped<UserService>();
 builder.Services.AddDbContext<UsersDBContext>((provider, options) =>
 {
     PostgresConnection conn = provider.GetRequiredService<IOptions<PostgresConnection>>().Value;
@@ -46,14 +52,18 @@ WebApplication app = builder.Build();
 
 using (IServiceScope? scope = app.Services.CreateScope())
 {
+    ILogger<Program> logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    
     try
     {
+        logger.LogInformation("Starting DB Migration...");
         UsersDBContext context = scope.ServiceProvider.GetRequiredService<UsersDBContext>();
         context.Database.Migrate();
+        logger.LogInformation("DB Migration completed.");
     }
     catch (Exception e)
     {
-        Console.WriteLine(e.Message);
+        logger.LogCritical(e, "An error occurred while migrating the DB.");
     }
 }
 

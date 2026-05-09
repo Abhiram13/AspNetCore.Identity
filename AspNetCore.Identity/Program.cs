@@ -29,6 +29,13 @@ builder.Services.AddDbContext<UsersDBContext>((provider, options) =>
     PostgresConnection conn = provider.GetRequiredService<IOptions<PostgresConnection>>().Value;
     options.UseNpgsql(conn.DbConnection);
 });
+
+builder.Services.AddDbContext<BusinessDbContext>((provider, options) =>
+{
+    PostgresConnection conn = provider.GetRequiredService<IOptions<PostgresConnection>>().Value;
+    options.UseNpgsql(conn.DbConnection);
+});
+
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
     {
         options.Password.RequireDigit = false;

@@ -1,3 +1,4 @@
+using AspNetCore.Identity.Features.Companies.Models;
 using AspNetCore.Identity.Features.Companies.Repository;
 using AspNetCore.Identity.Features.Role.Services;
 using AspNetCore.Identity.Features.User.Models;
@@ -29,18 +30,9 @@ public sealed class CompanyService
         return await _companyRepository.GetAllCompaniesAsync();
     }
 
-    public async Task CreateOneCompanyUserAsync(int companyId, CreateUserDto payload)
+    public async Task CreateOneCompanyUserAsync(int companyId, CreateCompanyUserDto payload)
     {
-        if (payload.RoleName == "Admin")
-        {
-            bool isAdminExistsInCompany = await IsAdminRoleExistsInCompanyAsync(companyId);
-            if (isAdminExistsInCompany)
-            {
-                throw new InvalidPayloadException("Admin account already exists in company");
-            }
-        }
-        
-        CreateUserResultDto userResult = await _userService.CreateOneUserAsync(payload);
+        CreateUserResultDto userResult = await _userService.CreateOneUserAsync(new CreateUserDto(payload.Email, payload.Password, "User"));
         await _companyRepository.CreateOneCompanyUserAsync(companyId, userResult.UserId, userResult.RoleId); // BUG: This one failed due to Foreign key constraint, but above user was created.
     }
 

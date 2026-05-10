@@ -9,12 +9,14 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using AspNetCore.Identity.Features.User.Models;
 using AspNetCore.Identity.Features.User.Services;
 using AspNetCore.Identity.Shared.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 
 namespace AspNetCore.Identity.Features.User.Controllers;
 
 [ApiController]
 [Route("api/users")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class UserController : ControllerBase
 {
     private readonly UserService _userService;
@@ -25,6 +27,7 @@ public class UserController : ControllerBase
     }
     
     [HttpPost]
+    [Authorize(Policy = Shared.Constants.Policies.IS_SUPER_ADMIN)]
     public async Task<IActionResult> CreateUserAccountAsync([FromBody] CreateUserDto request)
     {
         await _userService.CreateOneUserAsync(request);
@@ -36,6 +39,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = Shared.Constants.Policies.IS_SUPER_ADMIN)]
     public async Task<IActionResult> GetAllUsersAsync()
     {
         IReadOnlyList<ApplicationUser> users = await _userService.GetAllUsersAsync();

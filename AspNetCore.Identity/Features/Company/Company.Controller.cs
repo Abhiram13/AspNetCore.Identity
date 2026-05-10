@@ -45,7 +45,7 @@ public class CompanyController : ControllerBase
 
     [HttpPost("{companyId:int}/users")]
     [Authorize(Policy = Shared.Constants.Policies.IS_COMPANY_ADMIN)]
-    public async Task<IActionResult> CreateOneCompanyUserAsync([FromRoute] int companyId, [FromBody] CreateUserDto payload)
+    public async Task<IActionResult> CreateOneCompanyUserAsync([FromRoute] int companyId, [FromBody] CreateCompanyUserDto payload)
     {
         await _companyService.CreateOneCompanyUserAsync(companyId, payload);
         

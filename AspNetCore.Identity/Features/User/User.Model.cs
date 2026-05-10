@@ -15,6 +15,7 @@ public record LoginDto
 
 public record CreateUserResultDto
 {
-    public int UserId { get; set; }
-    public int RoleId { get; set; }
+    public int UserId { get; init; }
+    public int RoleId { get; init; }
+    
 }

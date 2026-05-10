@@ -4,6 +4,7 @@ using Abhiram.Extensions.DotEnv;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Text;
+using System.Text.Json;
 using AspNetCore.Identity.Features.Companies.Repository;
 using AspNetCore.Identity.Features.Companies.Services;
 using AspNetCore.Identity.Features.Jwt.Models;
@@ -24,7 +25,8 @@ DotEnvironmentVariables.Load();
 
 builder.AddConsoleGoogleSeriLog();
 builder.Services.AddRouting();
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(option => option.JsonSerializerOptions.PropertyNamingPolicy = null);
+builder.Services.ConfigureHttpJsonOptions(option => option.SerializerOptions.PropertyNamingPolicy = null); // TIP: This one for HttpContext.Response.WriteAsJsonAsync()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddOptions<PostgresConnection>().BindConfiguration("Postgres").ValidateOnStart();
@@ -73,18 +75,51 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidAudience = "identity",
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("NT0wxMAKSD4u5UpEvGXxcpx+iKQszd7KwRHG9bJcrNc="))
         };
+        options.Events = new JwtBearerEvents
+        {
+            OnChallenge = async context =>
+            {
+                context.HandleResponse();
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                context.Response.ContentType = "application/json";
+
+                ApiResponse response = new ApiResponse
+                {
+                    Message = "You are not authorized. Token may be missing or invalid.",
+                    StatusCode = HttpStatusCode.Unauthorized,
+                };
+
+                await context.Response.WriteAsJsonAsync(response);
+            },
+            OnForbidden = async context =>
+            {
+                context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                context.Response.ContentType = "application/json";
+
+                ApiResponse response = new ApiResponse
+                {
+                    StatusCode = HttpStatusCode.Forbidden,
+                    Message = "Access Denied: You do not have permission to perform this action."
+                };
+
+                await context.Response.WriteAsJsonAsync(response);
+            }
+        };
     });
 builder.Services.AddAuthorization(options =>
 {
+    // TIP: To prevent the policy check from running for anonymous users, setting explicit check to require authentication before checking the requirement.
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+    
     options.AddPolicy(Policies.IS_COMPANY_ADMIN, policy =>
     {
-        policy.RequireAuthenticatedUser(); // To prevent the policy check from running for anonymous users, setting explict check to require authentication before checking the requirement.
         policy.Requirements.Add(new CompanyAdminRoleRequirement("Admin"));
     });
     
     options.AddPolicy(Policies.IS_SUPER_ADMIN, policy =>
     {
-        policy.RequireAuthenticatedUser();
         policy.Requirements.Add(new SuperAdminRoleRequirement());
     });
 });

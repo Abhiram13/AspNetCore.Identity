@@ -14,4 +14,4 @@ public sealed record ApiResponse
 {
     public required HttpStatusCode StatusCode { get; init; }
     public required string Message { get; init; }
-} 
+}

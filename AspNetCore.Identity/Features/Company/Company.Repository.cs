@@ -28,7 +28,12 @@ public sealed class CompanyRepository
     public async Task CreateOneCompanyUserAsync(int companyId, int userId, int roleId)
     {
         CompanyUser companyUser = CompanyUser.Create(companyId, userId, roleId);
-        await _businessDbContext.AddAsync(companyUser); // BUG: This one failed due to Foreign key constraint, but above user was created.
+        await _businessDbContext.AddAsync(companyUser);
         await _businessDbContext.SaveChangesAsync();
+    }
+
+    public async Task<bool> IsAdminRoleExistsInCompanyAsync(int companyId, int roleId)
+    {
+        return await _businessDbContext.CompanyUsers.AnyAsync(x => x.CompanyId == companyId && x.RoleId == roleId);
     }
 }

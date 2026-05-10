@@ -47,7 +47,7 @@ public class CompanyController : ControllerBase
     [Authorize(Policy = Shared.Constants.Policies.IS_COMPANY_ADMIN)]
     public async Task<IActionResult> CreateOneCompanyUserAsync([FromRoute] int companyId, [FromBody] CreateUserDto payload)
     {
-        // await _companyService.CreateOneCompanyUserAsync(companyId, payload);
+        await _companyService.CreateOneCompanyUserAsync(companyId, payload);
         
         return StatusCode(StatusCodes.Status201Created, new ApiResponse { Message = "Successfully created company user", StatusCode = HttpStatusCode.Created });
     }

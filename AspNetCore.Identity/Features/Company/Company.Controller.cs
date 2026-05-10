@@ -1,6 +1,7 @@
 using System.Net;
 using AspNetCore.Identity.Features.Company.Models;
 using AspNetCore.Identity.Features.Company.Services;
+using AspNetCore.Identity.Features.User.Models;
 using AspNetCore.Identity.Shared.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,5 +36,13 @@ public class CompanyController : ControllerBase
             Result = companies,
             Message = "Successfully retrieved all companies",
         });
+    }
+
+    [HttpPost("{companyId:int}")]
+    public async Task<IActionResult> CreateOneCompanyUserAsync([FromRoute] int companyId, [FromBody] CreateUserDto payload)
+    {
+        await _companyService.CreateOneCompanyUserAsync(companyId, payload);
+        
+        return StatusCode(StatusCodes.Status201Created, new ApiResponse { Message = "Successfully created company user", StatusCode = HttpStatusCode.Created });
     }
 }

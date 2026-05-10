@@ -22,7 +22,7 @@ public sealed class UserService
         _jwtService = jwtService;
     }
 
-    public async Task CreateOneUserAsync(CreateUserDto payload)
+    public async Task<CreateUserResultDto> CreateOneUserAsync(CreateUserDto payload)
     {
         bool isRoleExists = await _roleService.IsRoleExistsAsync(payload.RoleName);
 
@@ -42,7 +42,7 @@ public sealed class UserService
 
         if (!createUserResult.Succeeded)
         {
-            throw new InvalidPayloadException($"Failed to create user - {createUserResult.Errors}");
+            throw new InvalidPayloadException($"Failed to create user - {createUserResult.Errors.First().Description}"); // FIX: Try to get rightful error message
         }
         
         IdentityResult assignResult = await _userManager.AddToRoleAsync(user, payload.RoleName);
@@ -51,6 +51,10 @@ public sealed class UserService
         {
             throw new InvalidPayloadException($"Failed to assign role - {assignResult.Errors}");
         }
+        
+        int? roleId = await _roleService.GetRoleIdByNameAsync(payload.RoleName);
+        
+        return new CreateUserResultDto { UserId = user.Id, RoleId = roleId ?? 0 }; // FIX: Role id will not be null here and should not pass o as default
     }
 
     public async Task<IReadOnlyList<ApplicationUser>> GetAllUsersAsync()

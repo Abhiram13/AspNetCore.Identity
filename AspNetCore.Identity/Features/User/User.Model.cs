@@ -12,3 +12,9 @@ public record LoginDto
     [JsonPropertyName("password")]
     public required string Password { get; set; }
 }
+
+public record CreateUserResultDto
+{
+    public int UserId { get; set; }
+    public int RoleId { get; set; }
+}

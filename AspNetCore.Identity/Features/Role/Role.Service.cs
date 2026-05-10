@@ -1,4 +1,5 @@
 using AspNetCore.Identity.Features.Role.Models;
+using AspNetCore.Identity.Features.User.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,5 +30,11 @@ public sealed class RoleService
     public async Task<bool> IsRoleExistsAsync(string roleName)
     {
         return await _roleManager.RoleExistsAsync(roleName);
+    }
+
+    public async Task<int?> GetRoleIdByNameAsync(string roleName)
+    {
+        ApplicationRole? role = await _roleManager.FindByNameAsync(roleName);
+        return role?.Id;
     }
 }

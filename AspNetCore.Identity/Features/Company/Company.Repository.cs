@@ -26,4 +26,11 @@ public sealed class CompanyRepository
         List<Company> allCompanies = await _businessDbContext.Companies.ToListAsync();
         return allCompanies;
     }
+
+    public async Task CreateOneCompanyUserAsync(int companyId, int userId, int roleId)
+    {
+        CompanyUser companyUser = CompanyUser.Create(companyId, userId, roleId);
+        await _businessDbContext.AddAsync(companyUser); // BUG: This one failed due to Foreign key constraint, but above user was created.
+        await _businessDbContext.SaveChangesAsync();
+    }
 }

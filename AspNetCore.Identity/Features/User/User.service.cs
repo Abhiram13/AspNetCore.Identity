@@ -90,4 +90,11 @@ public sealed class UserService
 
         return token;
     }
+
+    public async Task<IReadOnlyList<ApplicationUser>> GetAllUsersByIdAsync(IReadOnlyList<int> userIds)
+    {
+        List<ApplicationUser> users = await _userManager.Users.Where(u => userIds.Contains(u.Id)).ToListAsync();
+        
+        return users;
+    }
 }

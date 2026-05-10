@@ -44,9 +44,18 @@ public sealed class CompanyService
         await _companyRepository.CreateOneCompanyUserAsync(companyId, userResult.UserId, userResult.RoleId); // BUG: This one failed due to Foreign key constraint, but above user was created.
     }
 
+    public async Task<IReadOnlyList<ApplicationUser>> GetAllUsersByCompanyAsync(int companyId)
+    {
+        IReadOnlyList<int> userIds = await _companyRepository.GetAllCompanyUsersAsync(companyId);
+        IReadOnlyList<ApplicationUser> users = await _userService.GetAllUsersByIdAsync(userIds);
+        
+        return users;
+    }
+
     private async Task<bool> IsAdminRoleExistsInCompanyAsync(int companyId)
     {
         int? roleId = await _roleService.GetRoleIdByNameAsync("Admin");
+        
         if (roleId is not null && roleId.Value > 0)
         {
             bool isAdminRoleExistsInCompany = await _companyRepository.IsAdminRoleExistsInCompanyAsync(companyId, (int) roleId);

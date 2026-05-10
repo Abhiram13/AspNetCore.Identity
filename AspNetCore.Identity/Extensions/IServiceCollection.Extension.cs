@@ -1,5 +1,6 @@
 using AspNetCore.Identity.Features.Companies.Repository;
 using AspNetCore.Identity.Features.Companies.Services;
+using AspNetCore.Identity.Features.Jwt.Configuration;
 using AspNetCore.Identity.Features.Jwt.Models;
 using AspNetCore.Identity.Features.Jwt.Services;
 using AspNetCore.Identity.Features.Role.Services;
@@ -22,13 +23,13 @@ public static class IServiceCollectionExtensions
         public IServiceCollection AddServices()
         {
             collection
+                .AddOtherServices()
                 .AddLifeTimeServices()
                 .AddOptionConfigurations()
                 .AddDbContext()
                 .AddIdentityServices()
                 .AddJwtAuthentication()
-                .AddAuthorizationConfiguration()
-                .AddOtherServices();
+                .AddAuthorizationConfiguration();
             
             return collection;
         }
@@ -94,7 +95,7 @@ public static class IServiceCollectionExtensions
         private IServiceCollection AddJwtAuthentication()
         {
             collection
-                .ConfigureOptions<JwtConfiguration>()
+                .ConfigureOptions<JwtOptionsSetup>()
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer();
             

@@ -36,4 +36,11 @@ public sealed class CompanyRepository
     {
         return await _businessDbContext.CompanyUsers.AnyAsync(x => x.CompanyId == companyId && x.RoleId == roleId);
     }
+
+    public async Task<IReadOnlyList<int>> GetAllCompanyUsersAsync(int companyId)
+    {
+        List<int> userIds = await _businessDbContext.CompanyUsers.Where(cu => cu.CompanyId == companyId).Select(u => u.UserId).ToListAsync();
+        
+        return userIds;
+    }
 }

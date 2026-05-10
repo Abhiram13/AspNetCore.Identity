@@ -43,12 +43,25 @@ public class CompanyController : ControllerBase
         });
     }
 
-    [HttpPost("{companyId:int}")]
+    [HttpPost("{companyId:int}/users")]
     [Authorize(Policy = Shared.Constants.Policies.IS_COMPANY_ADMIN)]
     public async Task<IActionResult> CreateOneCompanyUserAsync([FromRoute] int companyId, [FromBody] CreateUserDto payload)
     {
         await _companyService.CreateOneCompanyUserAsync(companyId, payload);
         
         return StatusCode(StatusCodes.Status201Created, new ApiResponse { Message = "Successfully created company user", StatusCode = HttpStatusCode.Created });
+    }
+
+    [HttpGet("{companyId:int}/users")]
+    [Authorize(Policy = Shared.Constants.Policies.IS_COMPANY_ADMIN)]
+    public async Task<IActionResult> GetAllUsersByCompanyAsync([FromRoute] int companyId)
+    {
+        IReadOnlyList<ApplicationUser> users = await _companyService.GetAllUsersByCompanyAsync(companyId);
+
+        return Ok(new ApiResponse<IReadOnlyList<ApplicationUser>>
+        {
+            StatusCode = HttpStatusCode.OK,
+            Result = users,
+        });
     }
 }

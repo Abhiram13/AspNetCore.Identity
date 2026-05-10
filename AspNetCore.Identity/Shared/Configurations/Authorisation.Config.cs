@@ -9,6 +9,7 @@ public sealed class AuthorisationOptionsSetup : IConfigureOptions<AuthorizationO
     public void Configure(AuthorizationOptions options)
     {
         // TIP: To prevent the policy check from running for anonymous users, setting explicit check to require authentication before checking the requirement.
+        // NOTE: This one makes every endpoint even without [Authorise] fails with 401 if JWT token isn't sent. Use [AllowAnonymous] explicitly if endpoint does not require authentication.
         options.FallbackPolicy = new AuthorizationPolicyBuilder()
             .RequireAuthenticatedUser()
             .Build();

@@ -10,7 +10,6 @@ DotEnvironmentVariables.Load();
 
 builder.AddConsoleGoogleSeriLog();
 builder.Services.AddServices();
-
 builder.WebHost.ConfigureKestrel((_, server) =>
 {
     string portNumber = Environment.GetEnvironmentVariable("PORT") ?? "3000";

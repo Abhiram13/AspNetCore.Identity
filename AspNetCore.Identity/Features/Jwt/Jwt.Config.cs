@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace AspNetCore.Identity.Features.Jwt.Configuration;
 
-public sealed class JwtConfiguration : IConfigureNamedOptions<JwtBearerOptions>
+public sealed class JwtOptionsSetup : IConfigureNamedOptions<JwtBearerOptions>
 {
     public void Configure(JwtBearerOptions options)
     {
@@ -18,6 +18,7 @@ public sealed class JwtConfiguration : IConfigureNamedOptions<JwtBearerOptions>
     {
         if (name != JwtBearerDefaults.AuthenticationScheme) return;
         
+        options.IncludeErrorDetails = true;
         options.TokenValidationParameters = GetTokenValidationParameters();
         options.Events = GetJwtBearerEvents();
     }

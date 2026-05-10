@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using AspNetCore.Identity.Features.User.Models;
 using AspNetCore.Identity.Features.User.Services;
 using AspNetCore.Identity.Shared.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AspNetCore.Identity.Features.User.Controllers;
 
@@ -45,6 +46,7 @@ public class UserController : ControllerBase
         });
     }
 
+    [AllowAnonymous]
     [HttpPost("login")]
     public async Task<IActionResult> LoginUserAsync([FromBody] LoginDto request)
     {

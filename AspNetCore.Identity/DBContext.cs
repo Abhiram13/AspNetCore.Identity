@@ -54,6 +54,11 @@ public class UsersDBContext : IdentityDbContext<
 public class BusinessDbContext : DbContext
 {
     public BusinessDbContext(DbContextOptions<BusinessDbContext> options) : base(options) { }
+    
+    public DbSet<Company> Companies { get; set; }
+    public DbSet<CompanyUser> CompanyUsers { get; set; }
+    public DbSet<Community> Communities { get; set; }
+    public DbSet<CommunityUser> CommunityUsers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -4,24 +4,48 @@ using AspNetCore.Identity.Shared.Entities;
 namespace AspNetCore.Identity.Features.Company.Entities;
 
 [Table("companies")]
-public sealed class Company : BaseEntity
+public class Company : BaseEntity
 {
     [Column("name")]
-    public required string Name { get; init; }
+    public string Name { get; private init; } = string.Empty;
+    
+    private Company() { }
+
+    public static Company Create(string companyName)
+    {
+        Company company = new Company { Name = companyName };
+        company.SetModifiedAt();
+        
+        return company; 
+    }
 }
 
 [Table("company_users")]
 public sealed class CompanyUser
 {
     [Column("company_id")]
-    public required int CompanyId { get; set; }
+    public int CompanyId { get; private set; }
     
     [Column("user_id")]
-    public required int UserId { get; set; }
+    public int UserId { get; private set; }
     
     [Column("role_id")]
-    public required int RoleId { get; set; }
+    public int RoleId { get; private set; }
     
     [ForeignKey(nameof(CompanyId))]
     public Community? CompanyF { get; set; }
+    
+    private CompanyUser() { }
+
+    public static CompanyUser Create(int companyId, int userId, int roleId)
+    {
+        CompanyUser companyUser = new CompanyUser
+        {
+            CompanyId = companyId,
+            RoleId = roleId,
+            UserId = userId
+        };
+        
+        return companyUser;
+    }
 }

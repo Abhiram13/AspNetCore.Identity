@@ -24,14 +24,25 @@ public abstract class BaseEntity
     /// </remarks>
     [Required]
     [Column("created_at")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public DateTimeOffset CreatedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; private set; }
 
     /// <summary>
     /// Gets or sets the date when the entity was last modified.
     /// </summary>
     [Required]
     [Column("updated_at")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public DateTimeOffset UpdatedAt { get; set; }
+    public DateTimeOffset UpdatedAt { get; private set; }
+    
+    protected void SetModifiedAt()
+    {
+        DateTimeOffset now =  DateTimeOffset.UtcNow;
+        CreatedAt = now;
+        UpdatedAt = now;
+    }
+    
+    protected void SetUpdatedAt()
+    {
+        DateTimeOffset now = DateTimeOffset.UtcNow;
+        UpdatedAt = now;
+    }
 }

@@ -1,8 +1,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using AspNetCore.Identity.Shared.Constants;
 using AspNetCore.Identity.Shared.Entities;
+using AspNetCore.Identity.Features.Communities.Entities;
 
-namespace AspNetCore.Identity.Features.Company.Entities;
+namespace AspNetCore.Identity.Features.Companies.Entities;
 
 [Table(DatabaseTables.Company.TABLE_NAME)]
 public class Company : BaseEntity

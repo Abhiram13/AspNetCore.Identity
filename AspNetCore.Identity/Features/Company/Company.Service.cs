@@ -1,8 +1,8 @@
-using AspNetCore.Identity.Features.Company.Repository;
+using AspNetCore.Identity.Features.Companies.Repository;
 using AspNetCore.Identity.Features.User.Models;
 using AspNetCore.Identity.Features.User.Services;
 
-namespace AspNetCore.Identity.Features.Company.Services;
+namespace AspNetCore.Identity.Features.Companies.Services;
 
 public sealed class CompanyService
 {

@@ -1,4 +1,4 @@
-namespace AspNetCore.Identity.Features.Company.Models;
+namespace AspNetCore.Identity.Features.Companies.Models;
 
 public record InsertCompanyDto
 {

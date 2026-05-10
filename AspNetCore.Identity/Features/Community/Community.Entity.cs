@@ -1,8 +1,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using AspNetCore.Identity.Shared.Constants;
 using AspNetCore.Identity.Shared.Entities;
+using AspNetCore.Identity.Features.Companies.Entities;
 
-namespace AspNetCore.Identity.Features.Company.Entities;
+namespace AspNetCore.Identity.Features.Communities.Entities;
 
 [Table(DatabaseTables.Community.TABLE_NAME)]
 public sealed class Community : BaseEntity

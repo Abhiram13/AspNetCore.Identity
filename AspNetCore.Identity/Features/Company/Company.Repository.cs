@@ -1,9 +1,7 @@
-using AspNetCore.Identity.Features.Company.Entities;
+using AspNetCore.Identity.Features.Companies.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace AspNetCore.Identity.Features.Company.Repository;
-
-using Company = AspNetCore.Identity.Features.Company.Entities.Company;
+namespace AspNetCore.Identity.Features.Companies.Repository;
 
 public sealed class CompanyRepository
 {

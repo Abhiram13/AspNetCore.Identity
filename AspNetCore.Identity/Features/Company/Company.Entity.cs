@@ -1,12 +1,13 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using AspNetCore.Identity.Shared.Constants;
 using AspNetCore.Identity.Shared.Entities;
 
 namespace AspNetCore.Identity.Features.Company.Entities;
 
-[Table("companies")]
+[Table(DatabaseTables.Company.TABLE_NAME)]
 public class Company : BaseEntity
 {
-    [Column("name")]
+    [Column(DatabaseTables.Company.NAME)]
     public string Name { get; private init; } = string.Empty;
     
     private Company() { }
@@ -20,16 +21,16 @@ public class Company : BaseEntity
     }
 }
 
-[Table("company_users")]
+[Table(DatabaseTables.CompanyUsers.TABLE_NAME)]
 public sealed class CompanyUser
 {
-    [Column("company_id")]
+    [Column(DatabaseTables.CompanyUsers.COMPANY_ID)]
     public int CompanyId { get; private set; }
     
-    [Column("user_id")]
+    [Column(DatabaseTables.CompanyUsers.USER_ID)]
     public int UserId { get; private set; }
     
-    [Column("role_id")]
+    [Column(DatabaseTables.CompanyUsers.ROLE_ID)]
     public int RoleId { get; private set; }
     
     [ForeignKey(nameof(CompanyId))]

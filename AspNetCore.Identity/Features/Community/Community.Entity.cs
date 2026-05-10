@@ -1,31 +1,32 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using AspNetCore.Identity.Shared.Constants;
 using AspNetCore.Identity.Shared.Entities;
 
 namespace AspNetCore.Identity.Features.Company.Entities;
 
-[Table("communities")]
+[Table(DatabaseTables.Community.TABLE_NAME)]
 public sealed class Community : BaseEntity
 {
-    [Column("name")]
+    [Column(DatabaseTables.Community.NAME)]
     public required string Name { get; set; }
     
-    [Column("parent_company_id")]
+    [Column(DatabaseTables.Community.PARENT_COMPANY_ID)]
     public int ParentCompanyId { get; set; }
     
     [ForeignKey(nameof(ParentCompanyId))]
     public Company? ParentCompanyF { get; set; }
 }
 
-[Table("community_users")]
+[Table(DatabaseTables.CommunityUsers.TABLE_NAME)]
 public sealed class CommunityUser
 {
-    [Column("community_id")]
+    [Column(DatabaseTables.CommunityUsers.COMMUNITY_ID)]
     public required int CommunityId { get; set; }
     
-    [Column("user_id")]
+    [Column(DatabaseTables.CommunityUsers.USER_ID)]
     public required int UserId { get; set; }
     
-    [Column("role_id")]
+    [Column(DatabaseTables.CommunityUsers.ROLE_ID)]
     public required int RoleId { get; set; }
     
     [ForeignKey(nameof(CommunityId))]

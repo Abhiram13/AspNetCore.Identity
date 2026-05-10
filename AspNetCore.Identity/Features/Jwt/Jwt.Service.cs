@@ -25,7 +25,7 @@ public sealed class JwtService
             issuer: _jwtConfiguration.Issuer,
             audience: _jwtConfiguration.Audience,
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(1),
+            expires: DateTime.UtcNow.AddMinutes(5),
             signingCredentials: credentials
         );
         

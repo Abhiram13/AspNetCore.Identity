@@ -3,12 +3,15 @@ using AspNetCore.Identity.Features.Company.Models;
 using AspNetCore.Identity.Features.Company.Services;
 using AspNetCore.Identity.Features.User.Models;
 using AspNetCore.Identity.Shared.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetCore.Identity.Features.Company.Controllers;
 
 [ApiController]
 [Route("api/companies")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class CompanyController : ControllerBase
 {
     private readonly CompanyService _companyService;
@@ -19,6 +22,7 @@ public class CompanyController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = Shared.Constants.Policies.IS_SUPER_ADMIN)]
     public async Task<IActionResult> CreateCompanyAsync([FromBody] InsertCompanyDto dto)
     {
         await  _companyService.CreateCompanyAsync(dto.Name);
@@ -26,6 +30,7 @@ public class CompanyController : ControllerBase
     }
     
     [HttpGet]
+    [Authorize(Policy = Shared.Constants.Policies.IS_SUPER_ADMIN)]
     public async Task<IActionResult> GetAllCompanyAsync()
     {
         // FIX: Why "Entities.Company"?
@@ -39,9 +44,10 @@ public class CompanyController : ControllerBase
     }
 
     [HttpPost("{companyId:int}")]
+    [Authorize(Policy = Shared.Constants.Policies.IS_COMPANY_ADMIN)]
     public async Task<IActionResult> CreateOneCompanyUserAsync([FromRoute] int companyId, [FromBody] CreateUserDto payload)
     {
-        await _companyService.CreateOneCompanyUserAsync(companyId, payload);
+        // await _companyService.CreateOneCompanyUserAsync(companyId, payload);
         
         return StatusCode(StatusCodes.Status201Created, new ApiResponse { Message = "Successfully created company user", StatusCode = HttpStatusCode.Created });
     }
